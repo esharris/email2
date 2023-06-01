@@ -20,8 +20,12 @@ public class Email2Application {
 
 	private static final Logger log = LoggerFactory.getLogger(Email2Application.class);
 
+	private final EmailAccountFactoryFactory emailAccountFactoryFactory;
+
 	@Autowired
-	private EmailAccountFactoryFactory emailAccountFactoryFactory;
+	public Email2Application(EmailAccountFactoryFactory emailAccountFactoryFactory) {
+		this.emailAccountFactoryFactory = emailAccountFactoryFactory;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(Email2Application.class, args);
