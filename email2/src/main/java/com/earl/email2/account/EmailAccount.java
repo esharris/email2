@@ -1,5 +1,6 @@
 package com.earl.email2.account;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,7 +17,10 @@ public class EmailAccount {
 	private String lastName;
 	private String department;
 	private String password;
+
+	@Column(unique = true)
 	private String email;
+
 	private int mailboxCapacity = 500;
 	private String alternateEmail;
 
