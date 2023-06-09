@@ -60,8 +60,7 @@ public class EmailAccountController {
 
 	@GetMapping("/emailaccounts/{id}")
 	public EntityModel<EmailAccount> getEmailAccountById(@PathVariable long id) {
-		Optional<EmailAccount> findById = repository.findById(id);
-		EmailAccount emailAccount = findById.orElseThrow(() -> new EmailAccountNotFoundException("id: " + id));
+		EmailAccount emailAccount = getEmailAccount(id);
 		return emailAccountModelAssembler.toModel(emailAccount);
 	}
 
@@ -82,20 +81,13 @@ public class EmailAccountController {
 	@PutMapping("/emailaccounts/{id}")
 	public ResponseEntity<?> replaceEmailAccount(@RequestBody EmailAccountUpdateInput emailAccountUpdateInput,
 			@PathVariable Long id) {
-		Optional<EmailAccount> emailAccountOptional = repository.findById(id);
-
-		EmailAccount emailAccount;
-		if (emailAccountOptional.isPresent()) {
-			emailAccount = emailAccountOptional.get();
-			emailAccount.setFirstName(emailAccountUpdateInput.firstName());
-			emailAccount.setLastName(emailAccountUpdateInput.lastName());
-			emailAccount.setDepartment(emailAccountUpdateInput.department());
-			emailAccount.setPassword(emailAccountUpdateInput.password());
-			emailAccount.setMailboxCapacity(emailAccountUpdateInput.mailboxCapacity());
-			emailAccount.setAlternateEmail(emailAccountUpdateInput.alternateEmail());
-		} else {
-			throw new EmailAccountNotFoundException("id: " + id);
-		}
+		EmailAccount emailAccount = getEmailAccount(id);
+		emailAccount.setFirstName(emailAccountUpdateInput.firstName());
+		emailAccount.setLastName(emailAccountUpdateInput.lastName());
+		emailAccount.setDepartment(emailAccountUpdateInput.department());
+		emailAccount.setPassword(emailAccountUpdateInput.password());
+		emailAccount.setMailboxCapacity(emailAccountUpdateInput.mailboxCapacity());
+		emailAccount.setAlternateEmail(emailAccountUpdateInput.alternateEmail());
 		repository.save(emailAccount);
 		EntityModel<EmailAccount> entityModel = emailAccountModelAssembler.toModel(emailAccount);
 		return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
@@ -105,5 +97,11 @@ public class EmailAccountController {
 	public ResponseEntity<?> deleteEmailAccount(@PathVariable Long id) {
 		repository.deleteById(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	private EmailAccount getEmailAccount(long id) {
+		Optional<EmailAccount> findById = repository.findById(id);
+		EmailAccount emailAccount = findById.orElseThrow(() -> new EmailAccountNotFoundException("id: " + id));
+		return emailAccount;
 	}
 }
