@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.earl.email2.account.EmailAccount;
@@ -28,6 +29,7 @@ import com.earl.email2.accountfactory.EmailAccountFactory;
 import com.earl.email2.accountfactory.EmailAccountFactoryFactory;
 
 @RestController
+@RequestMapping("/emailaccounts")
 public class EmailAccountController {
 
 	private final EmailAccountRepository repository;
@@ -50,7 +52,7 @@ public class EmailAccountController {
 				Email2Constants.COMPANY_SUFFIX, Email2Constants.DEFAULT_MAILBOX_CAPACITY);
 	}
 
-	@GetMapping("/emailaccounts")
+	@GetMapping("")
 	public CollectionModel<EntityModel<EmailAccount>> retrieveAllEmailAccounts() {
 		List<EntityModel<EmailAccount>> emailAccounts = repository.findAll().stream()
 				.map(emailAccountModelAssembler::toModel).toList();
@@ -58,19 +60,19 @@ public class EmailAccountController {
 				linkTo(methodOn(EmailAccountController.class).retrieveAllEmailAccounts()).withSelfRel());
 	}
 
-	@GetMapping("/emailaccounts/{id}")
+	@GetMapping("/{id}")
 	public EntityModel<EmailAccount> getEmailAccountById(@PathVariable long id) {
 		EmailAccount emailAccount = getEmailAccount(id);
 		return emailAccountModelAssembler.toModel(emailAccount);
 	}
 
-	@GetMapping("/emailaccounts/ln/{lastName}")
+	@GetMapping("/ln/{lastName}")
 	public List<EntityModel<EmailAccount>> getEmailAccountByLastName(@PathVariable String lastName) {
 		List<EmailAccount> emailAccountList = repository.findByLastName(lastName);
 		return emailAccountList.stream().map(emailAccountModelAssembler::toModel).toList();
 	}
 
-	@PostMapping("/emailaccounts")
+	@PostMapping("")
 	public ResponseEntity<?> newEmailAccount(@RequestBody EmailAccountAddInput emailAccountInput) {
 		EmailAccount emailAccount = emailAccountFactory.create(emailAccountInput.firstName(),
 				emailAccountInput.lastName(), emailAccountInput.department());
@@ -78,7 +80,7 @@ public class EmailAccountController {
 		return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
 	}
 
-	@PutMapping("/emailaccounts/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> replaceEmailAccount(@RequestBody EmailAccountUpdateInput emailAccountUpdateInput,
 			@PathVariable Long id) {
 		EmailAccount emailAccount = getEmailAccount(id);
@@ -93,7 +95,7 @@ public class EmailAccountController {
 		return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
 	}
 
-	@DeleteMapping("/emailaccounts/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteEmailAccount(@PathVariable Long id) {
 		repository.deleteById(id);
 		return ResponseEntity.noContent().build();
