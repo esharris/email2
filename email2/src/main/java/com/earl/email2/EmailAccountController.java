@@ -14,6 +14,7 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -97,6 +98,33 @@ public class EmailAccountController {
 		emailAccount.setPassword(emailAccountUpdateInput.password());
 		emailAccount.setMailboxCapacity(emailAccountUpdateInput.mailboxCapacity());
 		emailAccount.setAlternateEmail(emailAccountUpdateInput.alternateEmail());
+		repository.save(emailAccount);
+		EntityModel<EmailAccount> entityModel = emailAccountModelAssembler.toModel(emailAccount);
+		return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+	}
+
+	@PatchMapping("/{id}")
+	public ResponseEntity<?> partiallyReplaceEmailAccount(@RequestBody EmailAccountUpdateInput emailAccountUpdateInput,
+			@PathVariable Long id) {
+		EmailAccount emailAccount = getEmailAccount(id);
+		if (emailAccountUpdateInput.firstName() != null) {
+			emailAccount.setFirstName(emailAccountUpdateInput.firstName());
+		}
+		if (emailAccountUpdateInput.lastName() != null) {
+			emailAccount.setLastName(emailAccountUpdateInput.lastName());
+		}
+		if (emailAccountUpdateInput.department() != null) {
+			emailAccount.setDepartment(emailAccountUpdateInput.department());
+		}
+		if (emailAccountUpdateInput.password() != null) {
+			emailAccount.setPassword(emailAccountUpdateInput.password());
+		}
+		if (emailAccountUpdateInput.mailboxCapacity() != null) {
+			emailAccount.setMailboxCapacity(emailAccountUpdateInput.mailboxCapacity());
+		}
+		if (emailAccountUpdateInput.alternateEmail() != null) {
+			emailAccount.setAlternateEmail(emailAccountUpdateInput.alternateEmail());
+		}
 		repository.save(emailAccount);
 		EntityModel<EmailAccount> entityModel = emailAccountModelAssembler.toModel(emailAccount);
 		return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
