@@ -21,7 +21,7 @@ public class EmailAccount {
 	@Column(unique = true)
 	private String email;
 
-	private int mailboxCapacity = 500;
+	private Integer mailboxCapacity = 500;
 	private String alternateEmail;
 
 	protected EmailAccount() {
@@ -29,7 +29,7 @@ public class EmailAccount {
 	}
 
 	public EmailAccount(String firstName, String lastName, String department, String password, String email,
-			int mailboxCapacity, String alternateEmail) {
+			Integer mailboxCapacity, String alternateEmail) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -88,11 +88,11 @@ public class EmailAccount {
 		this.email = email;
 	}
 
-	public int getMailboxCapacity() {
+	public Integer getMailboxCapacity() {
 		return mailboxCapacity;
 	}
 
-	public void setMailboxCapacity(int mailboxCapacity) {
+	public void setMailboxCapacity(Integer mailboxCapacity) {
 		this.mailboxCapacity = mailboxCapacity;
 	}
 

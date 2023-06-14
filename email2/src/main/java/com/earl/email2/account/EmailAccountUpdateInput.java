@@ -5,6 +5,6 @@ public record EmailAccountUpdateInput( //
 		String lastName, //
 		String department, //
 		String password, //
-		int mailboxCapacity, //
+		Integer mailboxCapacity, //
 		String alternateEmail) {
 }
