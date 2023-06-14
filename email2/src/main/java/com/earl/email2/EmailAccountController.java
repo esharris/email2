@@ -80,6 +80,13 @@ public class EmailAccountController {
 		return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
 	}
 
+	/**
+	 * The user can’t modify the index. It uniquely identifies the email account.
+	 * 
+	 * @param emailAccountUpdateInput
+	 * @param id
+	 * @return
+	 */
 	@PutMapping("/{id}")
 	public ResponseEntity<?> replaceEmailAccount(@RequestBody EmailAccountUpdateInput emailAccountUpdateInput,
 			@PathVariable Long id) {
