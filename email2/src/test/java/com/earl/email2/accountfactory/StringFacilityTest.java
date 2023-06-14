@@ -1,6 +1,7 @@
 package com.earl.email2.accountfactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,11 +9,27 @@ class StringFacilityTest {
 
 	@Test
 	void testEmailWord() {
-		assertEquals(StringFacility.emailWord(""), "");
-		assertEquals(StringFacility.emailWord("Blanchy Babe"), "Blanchy_Babe");
-		assertEquals(StringFacility.emailWord("Harris, Jr."), "Harris_Jr");
-		assertEquals(StringFacility.emailWord("Foo "), "Foo");
-		assertEquals(StringFacility.emailWord("Foo  Bar"), "Foo_Bar");
+		/**
+		 * Result can't be empty
+		 */
+		assertThrows(MalformedEmailWordInputException.class, () -> StringFacility.emailWord(""));
+		assertEquals("Blanchy_Babe", StringFacility.emailWord("Blanchy Babe"));
+		assertEquals("Harris_Jr", StringFacility.emailWord("Harris, Jr."));
+		assertEquals("Foo", StringFacility.emailWord("Foo "));
+		assertEquals("Foo_Bar", StringFacility.emailWord("Foo  Bar"));
+		assertEquals("boo", StringFacility.emailWord("boo__"));
+
+		/**
+		 * Must start with alphabetic
+		 */
+		assertThrows(MalformedEmailWordInputException.class, () -> StringFacility.emailWord("2Short"));
+		assertThrows(MalformedEmailWordInputException.class, () -> StringFacility.emailWord("$Short"));
+		assertThrows(MalformedEmailWordInputException.class, () -> StringFacility.emailWord(" Foo"));
+
+		/**
+		 * Result can't be empty
+		 */
+		assertThrows(MalformedEmailWordInputException.class, () -> StringFacility.emailWord("___"));
 	}
 
 }

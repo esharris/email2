@@ -40,7 +40,7 @@ public class Email2Application {
 			repository.save(emailAccountFactory.create("Jordan", "Harris", "sales"));
 			repository.save(emailAccountFactory.create("Senge", "Schove", "acct"));
 			repository.save(emailAccountFactory.create("Earl", "Harris", "dev"));
-			repository.save(emailAccountFactory.create("John", "Smith", ""));
+			repository.save(emailAccountFactory.create("John", "Smith", "custservice"));
 
 			log.info("EmailAcounts found with findAll():");
 			log.info("-------------------------------");
