@@ -20,11 +20,11 @@ public class EmailAccount {
 	private String password;
 
 	@Column(unique = true)
-	@Email
+	@Email(message = "email must be well-formed")
 	private String email;
 
 	private Integer mailboxCapacity = 500;
-	@Email
+	@Email(message = "alternate email must be well-formed")
 	private String alternateEmail;
 
 	protected EmailAccount() {

@@ -29,6 +29,8 @@ import com.earl.email2.account.EmailAccountUpdateInput;
 import com.earl.email2.accountfactory.EmailAccountFactory;
 import com.earl.email2.accountfactory.EmailAccountFactoryFactory;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/emailaccounts")
 public class EmailAccountController {
@@ -74,7 +76,7 @@ public class EmailAccountController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<?> newEmailAccount(@RequestBody EmailAccountAddInput emailAccountInput) {
+	public ResponseEntity<?> newEmailAccount(@Valid @RequestBody EmailAccountAddInput emailAccountInput) {
 		EmailAccount emailAccount = emailAccountFactory.create(emailAccountInput.firstName(),
 				emailAccountInput.lastName(), emailAccountInput.department());
 		EntityModel<?> entityModel = emailAccountModelAssembler.toModel(repository.save(emailAccount));
@@ -89,7 +91,7 @@ public class EmailAccountController {
 	 * @return
 	 */
 	@PutMapping("/{id}")
-	public ResponseEntity<?> replaceEmailAccount(@RequestBody EmailAccountUpdateInput emailAccountUpdateInput,
+	public ResponseEntity<?> replaceEmailAccount(@Valid @RequestBody EmailAccountUpdateInput emailAccountUpdateInput,
 			@PathVariable Long id) {
 		EmailAccount emailAccount = getEmailAccount(id);
 		emailAccount.setFirstName(emailAccountUpdateInput.firstName());
@@ -104,8 +106,8 @@ public class EmailAccountController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<?> partiallyReplaceEmailAccount(@RequestBody EmailAccountUpdateInput emailAccountUpdateInput,
-			@PathVariable Long id) {
+	public ResponseEntity<?> partiallyReplaceEmailAccount(
+			@Valid @RequestBody EmailAccountUpdateInput emailAccountUpdateInput, @PathVariable Long id) {
 		EmailAccount emailAccount = getEmailAccount(id);
 		if (emailAccountUpdateInput.firstName() != null) {
 			emailAccount.setFirstName(emailAccountUpdateInput.firstName());
